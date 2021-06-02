@@ -1,19 +1,7 @@
 @charset "UTF-8";
 
-@font-face {
-  font-family: "defend-icons";
-  src:url("../../assets/fonts/defend-icons.eot");
-  src:url("../../assets/fonts/defend-icons.eot?#iefix") format("embedded-opentype"),
-    url("../../assets/fonts/defend-icons.woff") format("woff"),
-    url("../../assets/fonts/defend-icons.ttf") format("truetype"),
-    url("../../assets/fonts/defend-icons.svg#defend-icons") format("svg");
-  font-weight: normal;
-  font-style: normal;
-
-}
-
 [data-icon]:before {
-  font-family: "defend-icons" !important;
+  font-family: "Poc-icons" !important;
   content: attr(data-icon);
   font-style: normal !important;
   font-weight: normal !important;
@@ -27,7 +15,7 @@
 
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
-  font-family: "defend-icons" !important;
+  font-family: "Poc-icons" !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
@@ -97,7 +85,7 @@
 .icon-minus-w:before {
   content: "\72";
 }
-.icon-deloitte-special-font-v2:before {
+.icon-Poc-special-font-v2:before {
   content: "\73";
 }
 .icon-check:before {

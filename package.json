@@ -1,11 +1,11 @@
 {
-  "name": "deloitte.starter.web",
+  "name": "Poc.starter.web",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng run Deloitte.Starter.Web:server:dev",
+    "build:ssr": "ng run Poc.Starter.Web:server:dev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

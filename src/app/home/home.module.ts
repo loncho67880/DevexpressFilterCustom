@@ -2,13 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HomeEffects } from './store/home.effect';
-import * as fromHome from './store/home.reducer';
 import { TranslateModule} from '@ngx-translate/core';
-import { SharedModule } from '../shared/shared.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,10 +24,7 @@ import { DxCheckBoxModule, DxDataGridModule, DxSelectBoxModule } from 'devextrem
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    StoreModule.forFeature(fromHome.homeFeatureKey, fromHome.reducer),
-    EffectsModule.forFeature([HomeEffects]),
     NgbModule,
-    SharedModule,
     TranslateModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },

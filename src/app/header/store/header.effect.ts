@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType} from '@ngrx/effects';
-import { switchMap, map, delay } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 import { HeaderService } from '../services/header.service';
 import { loadHeaderInfo, requestLoadHeaderInfo, loadOptionsInfo, requestLoadHeaderOptionsInfo } from './header.actions';
@@ -15,7 +15,7 @@ export class HeaderEffects {
   loadHeaderInfo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(requestLoadHeaderInfo),
-      switchMap(action =>
+      switchMap(() =>
         this.service.load().pipe(
           map(data => loadHeaderInfo({ header: data})),
         ),
@@ -26,7 +26,7 @@ export class HeaderEffects {
   loadOptionsInto$ = createEffect(() =>
     this.actions$.pipe(
       ofType(requestLoadHeaderOptionsInfo),
-      switchMap(action =>
+      switchMap(() =>
         this.service.loadOptions().pipe(
           map(data => loadOptionsInfo({ options: data})),
         ),

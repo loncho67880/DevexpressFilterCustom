@@ -78,7 +78,7 @@ p{
     display: inline-block;
     text-align: left;
     &::after{
-      font-family: "defend-icons";
+      font-family: "Poc-icons";
       content: "\61";
       color: $blue;
       border: none;
@@ -190,7 +190,7 @@ p{
   &__search{
     position: relative;
     &::after{
-      font-family: "defend-icons" !important;
+      font-family: "Poc-icons" !important;
       content: "\6b";
       color: $blue;
       font-size: 1.375rem;
@@ -399,7 +399,7 @@ p{
   margin: -1.25rem -1.875rem 1.25rem;
   background-color: $black;
   padding: 1.875rem;
-  background-image: url(../../assets/images/Defend-Banner.png);
+  background-image: url(../../assets/images/Poc-Banner.png);
   background-repeat: no-repeat; 
   background-size: contain;
   background-position: top center;
@@ -446,8 +446,4 @@ p{
   .selected{
     background-color: $blue !important;
   }
-}
-
-.dx-datagrid-search-text{
-  background: $green;
 }

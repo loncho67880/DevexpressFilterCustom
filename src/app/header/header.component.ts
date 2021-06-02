@@ -6,7 +6,6 @@ import * as fromStore from './store/header.reducer';
 import * as fromSelector from './store/header.selectors';
 import { Header } from './models/header';
 import { Options } from './models/options';
-import { CommonUtils } from '../shared/utils/common';
 
 @Component({
   selector: 'app-header',
@@ -19,14 +18,14 @@ export class HeaderComponent {
   options$: Observable<Options[]>;
   initials: string;
 
-  constructor(private store: Store<fromStore.HeaderState>, common: CommonUtils) {
+  constructor(private store: Store<fromStore.HeaderState>) {
     this.store.dispatch(fromActions.requestLoadHeaderInfo());
     this.store.dispatch(fromActions.requestLoadHeaderOptionsInfo());
     this.headerInfo$ = this.store.select(fromSelector.headerInfo);
     this.options$ = this.store.select(fromSelector.optionsInfo);
     this.headerInfo$.subscribe(data => {
       if (data) {
-        this.initials = common.getInitials(`${data.name} ${data.lastName}`);
+        this.initials = `PR`;
       }
     });
   }

@@ -129,86 +129,23 @@ table:not(.days),
 }
 
 
-
 .table-client{
-
-  th, td{
-    &:first-child{
-      background: $white;      
-      left: 0;
-      min-width: 18rem;
-      z-index: 30;
-      position: sticky;
-      @include tablet{
-        position: relative;
-      }
-      @include laptop{
-        min-width: 21rem;
-      }
-    }  
-  }
-
-  th{
-    text-align: left !important;
-    vertical-align: middle !important;
-  }
-
-  td{
-    &:first-child{
-      background: $blue-2;
-    }
-  }
-
 	&__title-header{
 		text-align: center;
-		border: 1px solid $whitesmoke-2!important;
+		border: 1px solid $blue !important;
 		border-bottom-color: $whitesmoke-2 !important;
-    box-shadow: 1px 0 0px 0 rgba(50,43,43,0.14);
 	}
 
   &.three-columns{
     .mat-header-row,
     .mat-row,
     tbody tr, thead tr{
-      .mat-header-cell, .mat-cell, th:not(.empty), td{
-        &:nth-child(2), &:nth-child(3), &:nth-child(4){
-          min-width: 6rem;
-          z-index: 30;
-          background: $white;
-          position: sticky;
-          @include tablet{
-            position: relative;            
-          }
+      .mat-header-cell, .mat-cell, th, td{
+        &:last-child{
+          border-right: 1px solid $blue;
         }
-        &:nth-child(2){
-          border-left: 1px solid $whitesmoke-2;
-          left: 18rem;
-          @include tablet{
-            left: unset;
-          }  
-          @include laptop{
-            left: 21rem;
-          }        
-        }
-        &:nth-child(3){
-          left: calc(18rem + 6rem);
-          @include tablet{
-            left: unset;
-          }
-          @include laptop{
-            left: calc(21rem + 6rem);
-          }
-        }
-        &:nth-child(4){
-          border-right: 1px solid $whitesmoke-2;
-          box-shadow: 1px 0 0px 0 rgba(50,43,43,0.14);
-          left: calc(18rem + 6rem + 6rem);
-          @include tablet{
-            left: unset;
-          }
-          @include laptop{
-            left: calc(21rem + 6rem + 6rem);
-          }
+        &:nth-last-child(3){
+          border-left: 1px solid $blue;
         }
       }
       
@@ -216,8 +153,8 @@ table:not(.days),
     .mat-row, tr{
       &:last-child{
         .mat-cell, td{
-          &:nth-child(2), &:nth-child(3), &:nth-child(4){
-            border-bottom: 1px solid $whitesmoke-2 !important;
+          &:last-child, &:nth-last-child(2), &:nth-last-child(3){
+            border-bottom: 1px solid $blue !important;
           }
         }
       }
@@ -229,27 +166,27 @@ table:not(.days),
     .mat-row,
     tbody tr, thead tr{
       .mat-header-cell, .mat-cell, th, td{
-        &:nth-child(3){
-          border-right: 1px solid $whitesmoke-2;
+        &:last-child{
+          border-right: 1px solid $blue;
         }
-        &:nth-child(2){
-          border-left: 1px solid $whitesmoke-2;
+        &:nth-last-child(2){
+          border-left: 1px solid $blue;
         }
       }      
     }		
 
     .mat-header-row,
     thead tr{
-      th:last-of-type{
-        border-right: none;
+      th:first-of-type{
+        border-left: none;
       }
     }
 
     .mat-row, tr{
       &:last-child{
         .mat-cell, td{
-          &:nth-child(2), &:nth-child(3){
-            border-bottom: 1px solid $whitesmoke-2 !important;
+          &:last-child, &:nth-last-child(2){
+            border-bottom: 1px solid $blue !important;
           }
         }
       }
@@ -261,9 +198,9 @@ table:not(.days),
     .mat-row,
     tbody tr, thead tr{
       .mat-header-cell, .mat-cell, th, td{
-        &:nth-child(2){
-          border-right: 1px solid $whitesmoke-2;
-          border-left: 1px solid $whitesmoke-2;
+        &:last-child{
+          border-right: 1px solid $blue;
+          border-left: 1px solid $blue;
         }
       }
       
@@ -271,31 +208,15 @@ table:not(.days),
     .mat-row, tr{
       &:last-child{
         .mat-cell, td{
-          &:nth-child(2){
-            border-bottom: 1px solid $whitesmoke-2 !important;
+          &:last-child{
+            border-bottom: 1px solid $blue !important;
           }
         }
       }
     }   
-  }  
-
-  .arrow-down,
-  .arrow-up{
-    width: 0.8rem;
-    height: 0.8rem;
-    display: block;
-    margin: auto;
   }
-  .arrow-down{
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    background: $red;    
-  }
-  .arrow-up{
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    background: $green;    
-  }
+  
 }
-
 
 
 /*Angular Material*/

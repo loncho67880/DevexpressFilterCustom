@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { FiscalYear } from '../models/fiscalyear';
 import { Home } from '../models/Home';
 import { Indicators } from '../models/indicators';
 import { Portfolio } from '../models/portfolio';
-import { AdvantagedClient } from '../models/advantageclient';
-import { environment } from '../../../environments/environment';
 import { SearchColumns } from '../models/searchColumns';
 import { OrderColumns } from '../models/orderColumns';
 import { FilterHome } from '../models/filterHome';
@@ -26,15 +24,13 @@ export class HomeService {
   ordered = false;
   descOrdered = false;
   columnOrdered: string;
-  clients$: Observable<AdvantagedClient[]>;
-  columns = 'client, program, fees, auditorSince, isSECFiler, companyType, fiscalYearEnd, region, office, industrySector, lcsp, lcspYearsInRole, ap, apYearsInRole, rating, changed, dateUpdated, lastModifyBy, lastModifyDate';
+  clients$: Observable<any[]>;
   numberFilters: number;
-  filterAll: string;
 
   constructor(private http: HttpClient) { }
 
   load(): Observable<Home> {
-    return of(x => new Home());
+    return of(() => new Home());
   }
 
   loadPortfolio(): Observable<Portfolio[]> {
@@ -47,37 +43,6 @@ export class HomeService {
 
   loadIndicators(): Observable<Indicators> {
     return this.http.get<Indicators>('assets/data/indicators.json');
-  }
-
-  loadAdvantagedClient(page: number, order: OrderColumns): Observable<AdvantagedClient[]> {
-    if (!order) {
-      order = new OrderColumns('client', true, 'ASC');
-    }
-    if (!environment.production) {
-      console.log(`${environment.URL}DeloitteClient/GetAll?startup=${page}&count=${this.cantperPage}&orderBy=${order.columnName}&orderType=${order.orderType}`);
-    }
-    return this.http.get<AdvantagedClient[]>(`${environment.URL}DeloitteClient/GetAll?startup=${page}&count=${this.cantperPage}&orderBy=${order.columnName}&orderType=${order.orderType}`);
-  }
-
-  // tslint:disable-next-line: no-shadowed-variable
-  loadFilterAdvantagedClient(page: number, filter: FilterHome[], order: OrderColumns): Observable<AdvantagedClient[]> {
-    if (!order) {
-      order = new OrderColumns('client', true, 'ASC');
-    }
-    if (!environment.production) {
-      console.log(`${environment.URL}DeloitteClient/GetAll?startup=${page}&count=${this.cantperPage}&FilterBy=${this.listColumnsFilter(filter)}&FilterValue=${this.listValuesColumnsFilter(filter)}&orderBy=${order.columnName}&orderType=${order.orderType}`);
-    }
-    return this.http.get<AdvantagedClient[]>(`${environment.URL}DeloitteClient/GetAll?startup=${page}&count=${this.cantperPage}&FilterBy=${this.listColumnsFilter(filter)}&FilterValue=${this.listValuesColumnsFilter(filter)}&orderBy=${order.columnName}&orderType=${order.orderType}`);
-  }
-
-  loadSearchBoxAdvantagedClient(page: number, search: string, order: OrderColumns): Observable<AdvantagedClient[]> {
-    if (!order) {
-      order = new OrderColumns('client', true, 'ASC');
-    }
-    if (!environment.production) {
-      console.log(`${environment.URL}DeloitteClient/GetAll?startup=${page}&count=${this.cantperPage}&FilterAll=${search}&orderBy=${order.columnName}&orderType=${order.orderType}`);
-    }
-    return this.http.get<AdvantagedClient[]>(`${environment.URL}DeloitteClient/GetAll?startup=${page}&count=${this.cantperPage}&FilterAll=${search}&orderBy=${order.columnName}&orderType=${order.orderType}`);
   }
 
   loadColumnsFilter(): Observable<SearchColumns[]> {
@@ -112,13 +77,36 @@ export class HomeService {
   }
 
   // tslint:disable-next-line: no-shadowed-variable
-  listColumnsFilter(filter: FilterHome[]): string {
-    return filter.map(x => x.columnName).join(',');
+  getFilters(filters: FilterHome[]): string {
+    let filter:string = '';
+    if(filters.length === 1){
+      filter = `&$filter=substringof('${filters[0].query}', ${filters[0].columnName}) eq true`;
+    }
+    else if(filters.length > 1){
+      let i:number = 0;
+      filters.forEach(item=>{
+        if(i===0){
+          filter = `&$filter=substringof('${item.query}', ${item.columnName}) eq true`;
+        }
+        else{
+          filter = `${filter} and substringof('${item.query}', ${item.columnName}) eq true`;
+        }
+      });
+    }
+    return filter;
   }
 
-  // tslint:disable-next-line: no-shadowed-variable
-  listValuesColumnsFilter(filter: FilterHome[]): string {
-    return filter.map(x => x.query).join(',');
+  getOrder(orderColumns: OrderColumns): string{
+    return `&$orderby=${orderColumns.columnName} ${orderColumns.orderType}`;
+  }
+
+  clientObservable(filterHome: FilterHome[], orderColumns: OrderColumns) {
+    if (!orderColumns) {
+      orderColumns = new OrderColumns('ProductName', true, 'asc');
+    }
+    let url = `https://services.odata.org/V3/Northwind/Northwind.svc/Products?$skip=${this.getPage()}&$top=${this.cantperPage}${this.getFilters(filterHome)}${this.getOrder(orderColumns)}`;
+    console.log(url);
+    this.clients$ = this.http.get<any>(url);
   }
 
   loadClients(loadOptions: any): Promise<any> {
@@ -139,15 +127,16 @@ export class HomeService {
             filterHome.push(filter);
           }
         } else {
-          loadOptions.filter.forEach((item, index) => {
+          loadOptions.filter.forEach((index) => {
             if (index === 0 || index % 2 === 0) {
               // tslint:disable-next-line: no-shadowed-variable
               const filter = new FilterHome(loadOptions.filter[index][0], loadOptions.filter[index].filterValue);
               if (loadOptions.filter[index].filterValue) {
                 filterHome.push(filter);
               } else {
-                loadOptions.filter[index].forEach((fil, index2) => {
-                  if (index == 0 || index % 2 == 0) {
+                loadOptions.filter[index].forEach((fil) => {
+                  if (index === 0 || index % 2 === 0) {
+                    // tslint:disable-next-line: no-shadowed-variable
                     const filter = new FilterHome(fil[0], fil.filterValue);
                     if (fil.filterValue) {
                       filterHome.push(filter);
@@ -180,7 +169,7 @@ export class HomeService {
       if (!this.ordered || this.descOrdered !== loadOptions.sort[0].desc || this.columnOrdered !== loadOptions.sort[0].selector) {
         this.resetPage();
       }
-      orderColumns = new OrderColumns(loadOptions.sort[0].selector, true, loadOptions.sort[0].desc ? 'DESC' : 'ASC');
+      orderColumns = new OrderColumns(loadOptions.sort[0].selector, true, loadOptions.sort[0].desc ? 'desc' : 'asc');
       this.descOrdered = loadOptions.sort[0].desc;
       this.columnOrdered = loadOptions.sort[0].selector;
       this.ordered = true;
@@ -196,52 +185,36 @@ export class HomeService {
         .toPromise()
         .then((data: any) => {
           this.setPage();
-          this.totalCount = data.totalCount;
+          this.totalCount = data.value.length;
           return {
-            data: data.items,
-            totalCount: data.totalCount
+            data: data.value,
+            totalCount: data.value.length
           };
         })
-        .catch(error => { throw new Error('Data Loading Error'); });
+        .catch(() => { throw new Error('Data Loading Error'); });
     } else {
       return this.clients$
         .toPromise()
         .then((data: any) => {
           this.setPage();
-          this.totalCount = data.totalCount;
+          this.totalCount = data.value.length;
           return {
-            data: data.items,
-            totalCount: data.totalCount
+            data: data.value,
+            totalCount: data.value.length
           };
         })
-        .catch(error => { throw new Error('Data Loading Error'); });
+        .catch(() => { throw new Error('Data Loading Error'); });
     }
   }
 
   leftpad(val, resultLength = 2, leftpadChar = '0'): string {
     return (String(leftpadChar).repeat(resultLength)
-      + String(val)).slice(String(val).length);
+          + String(val)).slice(String(val).length);
   }
 
   numPages() {
     return this.totalCount / this.cantperPage;
-  }
-
-  clientObservable(filterHome: FilterHome[], orderColumns: OrderColumns) {
-    if (filterHome && filterHome.length > 0 && filterHome.length <= 5) {
-      this.filtered = true;
-      this.clients$ = this.loadFilterAdvantagedClient(this.getPage(), filterHome, orderColumns);
-    } else if (filterHome && filterHome.length > 0 && filterHome.length > 5) {
-      this.filtered = true;
-      if (this.filterAll !== filterHome[0].query) {
-        this.resetPage();
-      }
-      this.filterAll = filterHome[0].query;
-      this.clients$ = this.loadSearchBoxAdvantagedClient(this.getPage(), this.filterAll, orderColumns);
-    } else {
-      this.clients$ = this.loadAdvantagedClient(this.getPage(), orderColumns);
-    }
-  }
+  }  
 
   distinctColumns(filterHome: FilterHome[]): FilterHome[] {
     const filterHomeDistinct: FilterHome[] = [];
