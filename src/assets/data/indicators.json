@@ -1,0 +1,10 @@
+{
+    "numberClients": 1526,
+    "valueClients": 6500000,
+    "numberActiveRFP": 235,
+    "valueActiveRFP": 3500000,
+    "numberPendingMA": 32,
+    "valuePendingMA": 1500000,
+    "numberSQACompleted": 15,
+    "valueSQACompleted": 750000
+}

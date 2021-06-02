@@ -1,0 +1,93 @@
+[
+    {
+        "tableName": "homepage.table.client",
+        "ColumnName": "client",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.program",
+        "ColumnName": "program",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.fees",
+        "ColumnName": "fees",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.auditorSince",
+        "ColumnName": "auditorSince",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.filesSEC",
+        "ColumnName": "filesSEC",
+        "selected": true
+    }
+    ,
+    {
+        "tableName": "homepage.table.companyType",
+        "ColumnName": "companyType",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.fiscalYearEnd",
+        "ColumnName": "fiscalYearEnd",
+        "selected": true
+    }
+    ,
+    {
+        "tableName": "homepage.table.region",
+        "ColumnName": "region",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.office",
+        "ColumnName": "office",
+        "selected": true
+    }
+    ,
+    {
+        "tableName": "homepage.table.industrySector",
+        "ColumnName": "industrySector",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.lcsp",
+        "ColumnName": "lcsp",
+        "selected": true
+    }
+    ,
+    {
+        "tableName": "homepage.table.lcspYearsInRole",
+        "ColumnName": "lcspYearsInRole",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.ap",
+        "ColumnName": "ap",
+        "selected": true
+    }
+    ,
+    {
+        "tableName": "homepage.table.apYearsInRole",
+        "ColumnName": "apYearsInRole",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.rating",
+        "ColumnName": "rating",
+        "selected": true
+    }
+    ,
+    {
+        "tableName": "homepage.table.changed",
+        "ColumnName": "changed",
+        "selected": true
+    },
+    {
+        "tableName": "homepage.table.dateUpdated",
+        "ColumnName": "dateUpdated",
+        "selected": true
+    }
+]

@@ -1,0 +1,386 @@
+<div class="client__snapshot">
+  <div class="client__snapshot-left">
+    <h3 class="title-section">
+      {{ "client.clientvulnerabilityrating" | translate }}
+      <i class="icon-info-w">
+        <span class="custom-tooltip">
+          {{ "client.firstParagrahpvulnerability" | translate }}
+        </span>
+      </i>
+    </h3>
+
+    <p class="client__paragrahp">
+      {{ "client.firstParagrahpvulnerability" | translate }}
+    </p>
+    <p class="client__paragrahp">
+      {{ "client.SecondParagrahpvulnerability" | translate }}
+    </p>
+
+    <div class="client__detail-container">
+      <div class="client__detail-group">
+        <label> {{ "client.relationshipVulnerability" | translate }}</label>
+        <div colspan="1" class="dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div colspan="1" *ngIf="relationShipDroDown">
+              {{ relationShipDroDown.value }}
+            </div>
+            <div colspan="1" *ngIf="!relationShipDroDown">
+              {{ "client.selectRating" | translate }}
+              <span class="caret"></span>
+            </div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let relation of relationShip$ | async">
+              <span class="dropdown-item" (click)="selectrelationShip(relation,retentionLoss)">
+                {{ relation.value }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="client__detail-group" *ngIf="isCritical()">
+        <label>{{ "client.criticalPhase" | translate }} </label>
+        <div class="dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div *ngIf="criticalPhaseDroDown">
+              {{ criticalPhaseDroDown.value }}
+            </div>
+            <div *ngIf="!criticalPhaseDroDown">
+              {{ "client.selectPhase" | translate }}
+              <span class="caret"></span>
+            </div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let critical of criticalPhase$ | async">
+              <a class="dropdown-item" (click)="selectcriticalPhase(critical)">{{ critical.value }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="client__detail-group" *ngIf="isCriticalRFP()">
+        <label>{{ "client.activeRFPRFIStatus" | translate }}</label>
+        <div class="dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div *ngIf="activeRFPDroDown">
+              {{ activeRFPDroDown.value }}
+            </div>
+            <div *ngIf="!activeRFPDroDown">
+              {{ "client.selectStatus" | translate }}
+              <span class="caret"></span>
+            </div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let active of activeRFP$ | async">
+              <a class="dropdown-item" (click)="selectactiveRFP(active)">{{active.value}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="relationShipDroDown" class="d-flex flex-row-reverse bd-highlight">
+      <button type="button" class="btn btn-primary mx2" (click)="saveVulnerabilityRating()">
+        <div *ngIf="!(loading$ | async)">
+          {{ "common.save" | translate }} changes
+        </div>
+        <app-loading *ngIf="loading$ | async"></app-loading>
+      </button>
+      <button  (click)="cancelVulnerabilityRating()" type="button" class="btn btn-secondary mx-2"
+        [disabled]="loading$ | async">
+        {{ "common.cancel" | translate }}
+      </button>
+    </div>
+
+    <h3 class="title-section">
+      {{ "client.RetentionLossHistory" | translate }}
+    </h3>
+    <button class="btn btn-link" (click)="openModal(retentionLoss)" [disabled]="loading$ | async">
+      <div *ngIf="!(loading$ | async)">
+        <i class="icon-plus"></i>
+        {{ "client.AddRetentionLoss" | translate }}
+      </div>
+      <app-loading *ngIf="loading$ | async"></app-loading>
+    </button>
+
+    <!-- modal -->
+    <ng-template #retentionLoss>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">
+          {{ "client.RetentionLossDetail" | translate }}
+        </h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-issue">
+          <div class="form-group">
+            <label> {{ "client.outcome" | translate }}:</label>
+            <div class="dropdown" dropdown>
+              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                aria-controls="dropdown-basic">
+                <div *ngIf="retentionOutcomeDropDown">
+                  {{ retentionOutcomeDropDown.value }}
+                </div>
+                <div *ngIf="!retentionOutcomeDropDown">
+                  {{ "client.selectOutcome" | translate }}
+                  <span class="caret"></span>
+                </div>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li role="menuitem" *ngFor="let outcome of retentionOutcome$ | async">
+                  <a class="dropdown-item" (click)="selectRetentionOutcome(outcome)">{{ outcome.value }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label> {{ "common.date" | translate }}:</label>
+            <input type="text"
+            placeholder="Date"
+            class="form-control"
+            bsDatepicker
+            [bsConfig]="{ isAnimated: true}"
+            [(ngModel)]="clientRetentionDetails.date">
+          </div>
+
+          <div class="form-group">
+            <label> {{ "client.reasonForRetentionLoss" | translate }}:</label>
+            <div class="dropdown" dropdown>
+              <button type="button" dropdownToggle class="btn dropdown-toggle dropdown-toggle-rigth"
+                (click)="isCollapsed = !isCollapsed" aria-controls="dropdown-basic">{{ "client.selectRetentionLoss" |
+                translate}}
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <mat-selection-list #checkItems
+                  (selectionChange)="selectRetentionReason(checkItems.selectedOptions.selected)">
+                  <mat-list-option *ngFor="let reason of reasonsRetentionLoss" [value]="reason.id"
+                    [selected]="reason.selected">
+                    {{ reason.value }}
+                  </mat-list-option>
+                </mat-selection-list>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{ "client.priority" | translate }}:</label>
+            <div class="dropdown" dropdown>
+              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                aria-controls="dropdown-basic">
+                <div *ngIf="priorityDropDown">
+                  {{ priorityDropDown.value }}
+                </div>
+                <div *ngIf="!priorityDropDown">
+                  {{ "client.selectPriority" | translate }}
+                  <span class="caret"></span>
+                </div>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li role="menuitem" *ngFor="let priority of priority$ | async">
+                  <a class="dropdown-item" (click)="selectPriority(priority)">{{ priority.value }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label> {{ "client.reasonForRFP" | translate }}</label>
+            <div class="dropdown" dropdown>
+              <button type="button" dropdownToggle class="btn dropdown-toggle dropdown-toggle-rigth"
+                (click)="isCollapsed = !isCollapsed" aria-controls="dropdown-basic">{{ "client.selectReasonForRFP" |
+                translate
+                }}
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <mat-selection-list #checkItems
+                  (selectionChange)="selectRFPReason(checkItems.selectedOptions.selected)">
+                  <mat-list-option *ngFor="let reason of RFPReason" [value]="reason.id" [selected]="reason.selected">
+                    {{ reason.value }}
+                  </mat-list-option>
+                </mat-selection-list>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label> {{ "client.RFPPriority" | translate }}</label>
+            <div class="dropdown" dropdown>
+              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                aria-controls="dropdown-basic">
+                <div *ngIf="RFPpriorityDropDown">
+                  {{ RFPpriorityDropDown.value }}
+                </div>
+                <div *ngIf="!RFPpriorityDropDown">
+                  {{ "client.selectPriority" | translate }}
+                  <span class="caret"></span>
+                </div>
+              </button>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li role="menuitem" *ngFor="let priority of priority$ | async">
+                  <a class="dropdown-item" (click)="selectRFPPriority(priority)">{{ priority.value }}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="mt-2 d-flex justify-content-center">
+          <button type="button" class="btn btn-secondary mx-2" (click)="closeModal()">
+            {{ "common.cancel" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary mx2" (click)="saveRetention()"> {{ "common.save" | translate
+            }}</button>
+        </div>
+      </div>
+    </ng-template>
+
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="text-left">{{ "common.date" | translate }}</th>
+          <th class="text-left">{{ "client.outcome" | translate }}</th>
+          <th class="text-left">{{ "client.newAuditor" | translate }}</th>
+          <th class="text-left">{{ "client.reasonForRetentionLoss" | translate }}</th>
+          <th class="text-left">{{ "client.priority" | translate }}</th>
+          <th class="text-left">{{ "client.reasonForRFP" | translate }}</th>
+          <th class="text-left">{{ "client.priority" | translate }}</th>
+          <th class="text-left">{{ "common.editDelete" | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="clientRetentionDetailsList$ | async as clientRetentionDetailsList; else notData ">
+          <tr *ngFor="let retention of clientRetentionDetailsList">
+            <td class="text-left">{{retention.date}} </td>
+            <td class="text-left">{{getOutcomeName(retention.outcomeId)}} </td>
+            <td class="text-left"></td>
+            <td class="text-left">
+              <div *ngFor="let reason of retention.reasonsRetentionLoss">
+                {{getRetentionDetailsReason(reason.reasonId)}}
+              </div>
+            </td>
+            <td class="text-left">
+              <div *ngFor="let reason of retention.reasonsRetentionLoss">
+                {{getRetentionPriority(reason.priorityId)}}
+              </div>
+            </td>
+            <td class="text-left">
+              <div *ngFor="let reason of retention.reasonsRFP">
+                {{getRetentionRFP(reason.reasonId)}}
+              </div>
+            </td>
+            <td class="text-left">
+              <div *ngFor="let reason of retention.reasonsRFP">
+                {{getRFPPriority(reason.priorityId)}}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="table-actions">
+                <i class="icon-edit-circle-w" (click)="openEdit(retention, retentionLoss)"></i>
+                <!-- <i class="icon-delete-circle-w" (click)="deleteRetention(retention)"></i> -->
+                <i class="icon-delete-circle-w" (click)="openConfirm(retention,modalconfirm)"></i>
+              </div>
+            </td>
+            <!--modal confirm  -->
+            <ng-template #modalconfirm>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">
+                  {{ "client.deleleteRetentionLossConfirmation" | translate }}
+                </h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body text-center">
+                <p>
+                  {{ "client.deleleteRetentionLossQuestion" | translate }}
+                </p>
+                <div class="mt-2 d-flex justify-content-center">
+                  <button type="button" class="btn btn-secondary mx-2" (click)="closeModal()">
+                    {{ "common.cancel" | translate }}
+                  </button>
+                  <button type="button" class="btn btn-primary mx2" (click)="deleteRetention(retention)">
+                    {{ "common.delete" | translate }}
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <ng-template #notData>
+      <tr>
+        <td> {{ "revenue.notData" | translate }}</td>
+      </tr>
+    </ng-template>
+
+
+    <div class="client__snapshot-update">
+      <div class="form-group">
+        <label>{{ "client.validationStatus" | translate }}</label>
+        <span>{{ clientRetentionDetailsLast?.modifyBy }}</span>
+      </div>
+      <div class="form-group">
+        <label>{{ "client.lastUpdateOn" | translate }}</label>
+        <span>{{ clientRetentionDetailsLast?.modifyDate }}</span>
+      </div>
+    </div>
+
+    <ng-template #loadingclient>
+      <app-loading></app-loading>
+    </ng-template>
+
+    <div class="client__collapse">
+      <div class="main-collapse" data-toggle="collapse" data-target="#issues-collapse"
+        (click)="isCollapsedIssue = !isCollapsedIssue" [attr.aria-expanded]="!isCollapsedIssue"
+        aria-controls="collapseIssue">
+        <h3 class="title-section">{{ "client.issuesActions" | translate }}</h3>
+        <i *ngIf="isCollapsedIssue" class="icon-arrow-down"></i>
+        <i *ngIf="!isCollapsedIssue" class="icon-arrow-up"></i>
+      </div>
+      <div class="collapse" id="collapseIssue" [collapse]="isCollapsedIssue">
+        <app-issues></app-issues>
+      </div>
+    </div>
+
+    <div class="client__collapse">
+      <div class="main-collapse" data-toggle="collapse" data-target="#comment-collapse"
+        (click)="isCollapsedComments = !isCollapsedComments" [attr.aria-expanded]="!isCollapsedComments"
+        aria-controls="collapseComments">
+        <h3 class="title-section">{{ "client.comments" | translate }}</h3>
+        <i *ngIf="isCollapsedComments" class="icon-arrow-down"></i>
+        <i *ngIf="!isCollapsedComments" class="icon-arrow-up"></i>
+      </div>
+
+      <div class="collapse" id="collapseComments" [collapse]="isCollapsedComments">
+        <app-comments></app-comments>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="client__snapshot-right" *ngIf="false">
+      <h3 class="title-section">
+        {{ "client.serviceQualityAssessment" | translate }}
+      </h3>
+      <div class="client__detail-group">
+        <label>{{ "client.sqasubmissionStatus" | translate }}</label>
+        <span>SQA not submitted</span>
+      </div>
+    </div>
+    <div class="client__snapshot-right">
+      <h3 class="title-section">{{ "client.quicklinks" | translate }}</h3>
+      <a class="client__link" href="">{{
+        "client.momentsmatterdetails" | translate
+        }}</a>
+      <a class="client__link" href="">{{
+        "client.marketplacePricingAnalysis" | translate
+        }}</a>
+    </div>
+  </div>
+</div>

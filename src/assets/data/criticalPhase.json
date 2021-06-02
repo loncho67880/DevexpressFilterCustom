@@ -1,0 +1,30 @@
+[   
+    {
+        "Id": "1",
+        "Name": "Active RFP"
+    },
+    {
+        "Id": "2",
+        "Name": "FP Expected"
+    },
+    {
+        "Id": "3",
+        "Name": "Active RFI"
+    },
+    {
+        "Id": "4",
+        "Name": "RFI Expected"
+    },
+    {
+        "Id": "5",
+        "Name": "M&A -At Risk"
+    },
+    {
+        "Id": "6",
+        "Name": "M&A -Lost Likely"
+    },
+    {
+        "Id": "7",
+        "Name": "Other"
+    }
+]

@@ -1,0 +1,146 @@
+<button class="btn btn-link" *ngIf="canAddIssues" (click)="openModal(template)" [disabled]="loading$ | async">
+  <i class="icon-plus"></i>
+  {{ "client.addIssue" | translate }}
+  <app-loading *ngIf="loading$ | async"></app-loading>
+</button>
+<div *ngIf="clientIssues$ | async as clientIssues">
+  <div class="mt-3">
+    <p *ngIf="clientIssues.length == 0" class="client-comment__paragraph">{{ "client.noIssuesActions" | translate }}</p>
+  </div>
+  <div *ngIf="clientIssues.length > 0" class="client-issue table-scroll mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>{{ "client.issue" | translate }}</th>
+          <th>{{ "client.issuepriority" | translate }}</th>
+          <th class="right-border-cell">{{ "client.additionalIssueDetails" | translate }}</th>
+          <th>{{ "client.action" | translate }}</th>
+          <th>{{ "client.actionPriority" | translate }}</th>
+          <th class="right-border-cell">{{ "client.actionDetails" | translate }}</th>
+          <th>{{ "client.createdby" | translate }}</th>
+          <th>{{ "client.dateUpdated" | translate }}</th>
+          <th class="text-center">Edit/Delete</th>
+        </tr>                        
+      </thead>
+      <tbody>
+        <tr *ngFor="let issue of clientIssues$ | async">
+          <td>{{ getIssue(issue.issueId).value }}</td>
+          <td>{{ getSeverity(issue.severityId).value }}</td>
+          <td class="right-border-cell">{{ issue.additionalDetails }}</td>
+          <td>{{ getAction(issue.actionId).value }}</td>
+          <td>{{ getSeverity(issue.actionSeverityId).value }}</td>
+          <td class="right-border-cell">{{ issue.actionAdditionalDetails }}</td>
+          <td>{{ issue.modifyBy }}</td>
+          <td>{{ issue.modifyDate }}</td>
+          <td>
+            <div class="table-actions">
+              <i class="icon-edit-circle-w" title ="{{ 'common.edit' |  translate }} " (click)="update(issue, template)"></i>
+              <i class="icon-delete-circle-w" title ="{{ 'common.delete' |  translate }} " (click)="openConfirm(issue, modalconfirm)"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ "client.addIssue" | translate }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="modal-issue">
+      <div class="form-group">
+        <label>{{ "client.issue" | translate }}:</label>
+        <div class="btn-group dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div *ngIf="issueDropdown">{{ issueDropdown.value }}</div>
+            <div *ngIf="!issueDropdown">{{ "client.selectIssue" | translate }} <span class="caret"></span></div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let issue of clientIssuesList$ | async"><a class="dropdown-item"
+                (click)="selectIssue(issue)">{{issue.value}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>{{ "client.priority" | translate }}</label>
+        <div class="btn-group dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div *ngIf="priorityIssueDropdown">{{ priorityIssueDropdown.value }}</div>
+            <div *ngIf="!priorityIssueDropdown">{{ "client.selectPriority" | translate }} <span class="caret"></span>
+            </div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let priority of clientSeveritys$ | async"><a class="dropdown-item"
+                (click)="selectPriorityIssue(priority)">{{priority.value}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group w-100">
+        <label>{{ "client.issueDetails" | translate }}:</label>
+        <textarea class="form-control" [(ngModel)]="issueSelected.additionalDetails"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>{{ "client.action" | translate }}:</label>
+        <div class="btn-group dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div *ngIf="actionDropdown">{{ actionDropdown.value }}</div>
+            <div *ngIf="!actionDropdown">{{ "client.selectAction" | translate }} <span class="caret"></span></div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let action of clientActions$ | async"><a class="dropdown-item"
+                (click)="selectAction(action)">{{action.value}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>{{ "client.priority" | translate }}</label>
+        <div class="btn-group dropdown" dropdown>
+          <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+            aria-controls="dropdown-basic">
+            <div *ngIf="priorityActionDropdown">{{ priorityActionDropdown.value }}</div>
+            <div *ngIf="!priorityActionDropdown">{{ "client.selectPriority" | translate }} <span class="caret"></span>
+            </div>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" *ngFor="let priority of clientSeveritys$ | async"><a class="dropdown-item"
+                (click)="selectPriorityAction(priority)">{{priority.value}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group w-100">
+        <label>{{ "client.actionDetails" | translate }}:</label>
+        <textarea class="form-control" [(ngModel)]="issueSelected.actionAdditionalDetails"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">{{ "common.cancel" |
+      translate }}</button>
+    <button class="btn btn-primary" (click)="save()">{{ "common.save" | translate }}</button>
+  </div>
+</ng-template>
+
+<ng-template #modalconfirm>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ "client.confirmIssueDeleteTitle" | translate }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p>{{ "client.confirmIssueDelete" | translate }}</p>
+    <div class="client-comment__actions">
+      <button type="button" class="btn btn-secundary" (click)="closeModal()">{{ "common.cancel" | translate }}</button>
+      <button type="button" class="btn btn-primary" (click)="delete()">{{ "client.deleteIssue" | translate }}</button>
+    </div>
+  </div>
+</ng-template>

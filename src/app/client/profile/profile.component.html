@@ -1,0 +1,85 @@
+<div *ngIf="profileInfo$ | async as profileInfo">
+  <h2 class="title-page">
+    {{ profileInfo.client }}
+    <button class="btn btn-primary" style="display: none;">
+      <i class="icon-plus"></i>
+      {{ "profile.addNote" | translate }}
+    </button>
+  </h2>
+
+  <h3 class="title-section">{{ "profile.profile" | translate }}:</h3>
+
+  <div *ngIf="profileInfo$ | async as profileInfo" class="client__profile">
+    <app-loading *ngIf="profileInfo.isLoading"></app-loading>
+    <div *ngIf="!profileInfo.isLoading" class="client__profile-item">
+      <label>{{ "profile.program" | translate }}:</label>
+      <span>{{ profileInfo.program }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.lcsp" | translate }}:</label>
+      <span>{{ profileInfo.lcsp }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.secFiles" | translate }}:</label>
+      <span>{{ profileInfo.filesSEC }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.f1000" | translate }}:</label>
+      <span>{{ profileInfo.fortuneRank }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "common.region" | translate }}:</label>
+      <span>{{ profileInfo.region }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.advisoryPartner" | translate }}:</label>
+      <span>{{ profileInfo.advisoryPartner }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.proxyFees" | translate }}: 
+        <i class="icon-info-w">
+          <span class="custom-tooltip">
+            Audit fees represent Audit and Audit-related proxy fees for SEC registrants and US-only Audit fees for non-registrants
+          </span>
+        </i> 
+      </label>
+      <span>{{ profileInfo.fees }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.r3000" | translate }}:</label>
+      <span>{{ profileInfo.russell3000 }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.deloitteOffice" | translate }}:</label>
+      <span>{{ profileInfo.office }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.auditorSince" | translate }}:</label>
+      <span>{{ profileInfo.auditorSince }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.companyType" | translate }}:</label>
+      <span>{{ profileInfo.companyType }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.s&P500" | translate }}:</label>
+      <span>{{ profileInfo.sP500Yn }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.industrySector" | translate }}:</label>
+      <span>{{ profileInfo.industrySector }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.fiscalYearEnd" | translate }}:</label>
+      <span>{{ profileInfo.fiscalYearEnd }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.investorCompanies" | translate }}:</label>
+      <span>{{ profileInfo.investorCompanies }}</span>
+    </div>
+    <div class="client__profile-item">
+      <label>{{ "profile.clientRevenue" | translate }}:</label>
+      <span>{{ profileInfo.clientRevenue }}</span>
+    </div>
+  </div>
+</div>

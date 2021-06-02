@@ -1,0 +1,22 @@
+[   
+    {
+        "Id": "1",
+        "Name": "RFI Received"
+    },
+    {
+        "Id": "2",
+        "Name": "RFI Submitted"
+    },
+    {
+        "Id": "3",
+        "Name": "RFP Received"
+    },
+    {
+        "Id": "4",
+        "Name": "Proposal Submitted"
+    },
+    {
+        "Id": "5",
+        "Name": "Orals Completed"
+    }
+]

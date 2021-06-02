@@ -1,0 +1,164 @@
+<!-- <h2 class="title-section mb-0">{{ 'homepage.banner.defend.Title' | translate }}</h2> -->
+<div class="banner">
+  <span>The Defend app includes Audit & Assurance clients, and provides:</span>
+  <p>{{ 'homepage.banner.defend.Paragraph' | translate }}</p>
+</div>
+
+<div *ngIf="false" class="search__home">
+
+  <div class="filter__group">
+    <div class="dropdown">
+      <label class="dropdown__label">{{ 'homepage.selectPortfolio' | translate }}</label>
+      <div class="dropdown ml-auto" ngbDropdown>
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+          {{ 'homepage.placeholderSelectPortfolio' | translate }}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+          <a *ngFor="let option of portfolio$ | async" class="dropdown-item" href="">{{ option.name }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown d-none">
+      <label class="dropdown__label">{{ 'homepage.fiscalYear' | translate }}d-none</label>
+      <div class="dropdown ml-auto" ngbDropdown>
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+          {{ 'homepage.placeholderFiscalYear' | translate }}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" ngbDropdownMenu>
+          <a *ngFor="let option of fiscalyear$ | async" class="dropdown-item" href="">{{ option.name }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown search__dropdown d-done">
+    <div class=" search__input-container d-none" data-toggle="dropdown">
+      <input type="text" class="search__input" placeholder="{{ 'homepage.placeholdersearch' | translate }}">
+      <i class="icon-search"></i>
+    </div>
+  </div>
+</div>
+
+<!-- removed -->
+<div class="boxes">
+  <h2 class="boxes__title">YTD:</h2>
+  <div *ngIf="indicators$ | async as indicator; else loadingindicator" class="boxes__group">
+    <div class="boxes__details">
+      <div>
+        <span>{{ 'homepage.clients' | translate}}</span>
+        <label class="boxes__value">{{ indicator.numberClients | currency:'':'':'0.0-0' }}</label>
+        <span>Fees ($M) {{ indicator.valueClients | currency:'USD':'symbol':'0.0-0' }} </span>
+      </div>
+      <i class="icon-user"></i>
+    </div>
+    <div class="boxes__details">
+      <div>
+        <span>{{ 'homepage.activeRFPs' | translate }}</span>
+        <label class="boxes__value">{{ indicator.numberActiveRFP | currency:'':'':'0.0-0' }}</label>
+        <span>{{ indicator.valueActiveRFP | currency:'USD':'symbol':'0.0-0' }} (Fees)</span>
+      </div>
+      <i class="icon-file"></i>
+    </div>
+    <div class="boxes__details">
+      <div>
+        <span>{{ 'homepage.PendingMA' | translate}}</span>
+        <label class="boxes__value">{{ indicator.numberPendingMA | currency:'':'':'0.0-0' }} </label>
+        <span>{{ indicator.valuePendingMA | currency:'USD':'symbol':'0.0-0' }} (Fees)</span>
+      </div>
+      <i class="icon-file"></i>
+    </div>
+    <div class="boxes__details">
+      <div>
+        <span>{{ 'homepage.sqaCompleted' | translate}}</span>
+        <label class="boxes__value">{{ indicator.numberSQACompleted | currency:'':'':'0.0-0' }} </label>
+        <span>{{ indicator.valueSQACompleted | currency:'USD':'symbol':'0.0-0' }} (Fees)</span>
+      </div>
+      <i class="icon-file"></i>
+    </div>
+  </div>
+  <ng-template #loadingindicator>
+    <app-loading></app-loading>
+  </ng-template>
+</div>
+
+
+<div class="table-container">
+
+  <h2 class="table-container__title">
+    {{ 'homepage.advantagedClientPortfolio' | translate }}
+    <span>{{ 'homepage.userRegionIndustry' | translate }}</span>
+  </h2>
+
+  <div class="table-scroll">
+    <dx-data-grid id="gridContainer" [dataSource]="dataSource" [allowColumnReordering]="true"
+      [allowColumnResizing]="true" [columnAutoWidth]="true" [showBorders]="true"
+      [remoteOperations]="{ paging: true, filtering: true, sorting: true, grouping: false, summary: false, groupPaging: false }"
+      [wordWrapEnabled]="true" rowTemplate="rowTemplateName">
+      <dxo-load-panel [enabled]="false"></dxo-load-panel>
+      <dxo-scrolling mode="infinite"></dxo-scrolling>
+      <dxo-paging pageSize="15"></dxo-paging>
+      <dxo-filter-row [showOperationChooser]="false" [visible]="false"></dxo-filter-row>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+      <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+      <dxo-export [enabled]="true"></dxo-export>
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+
+      <!--<dxi-column dataField="client" caption="Client" width="150" [fixed]="true"></dxi-column>-->
+      <dxi-column dataField="client" caption="Client" width="150"></dxi-column>
+      <dxi-column caption="Vulnerability Rating" alignment="center">
+        <dxi-column dataField="rating" caption="Rating"></dxi-column>
+        <dxi-column dataField="changed" caption="Change"></dxi-column>
+        <dxi-column dataField="dateUpdated" caption="Date Updated" dataType="date" format="yyyy-MM-dd" width="100">
+        </dxi-column>
+      </dxi-column>
+      <dxi-column dataField="program" caption="Program" width="150"></dxi-column>
+      <dxi-column dataField="fees" caption="Audit/Related Fees (Revenue)" width="120"></dxi-column>
+      <dxi-column dataField="auditorSince" caption="Auditor Since" dataType="date" format="yyyy-MM-dd" width="100">
+      </dxi-column>
+      <dxi-column dataField="filesSEC" caption="Files w/SEC"></dxi-column>
+      <dxi-column dataField="companyType" caption="Company Type"></dxi-column>
+      <dxi-column dataField="fiscalYearEnd" caption="FYE"></dxi-column>
+      <dxi-column dataField="region" caption="Region"></dxi-column>
+      <dxi-column dataField="office" caption="Office"></dxi-column>
+      <dxi-column dataField="industrySector" caption="Industry Sector"></dxi-column>
+      <dxi-column dataField="lcsp" caption="LCSP"></dxi-column>
+      <dxi-column dataField="lcspYearsInRole" caption="LCSP Final Audit Year"></dxi-column>
+      <dxi-column dataField="ap" caption="AP"></dxi-column>
+      <dxi-column dataField="apYearsInRole" caption="AP Final Audit Year"></dxi-column>
+
+      <tbody class="table-client" *dxTemplate="let client of 'rowTemplateName'">
+        <tr>
+          <td>
+            <a href="#/client/{{client.data.id}}">{{client.data.client}}</a>
+          </td>
+          <td>{{client.data.rating}}</td>
+          <td>
+            <div *ngIf="client.data.changeBehaviour === 1">
+              <span class="arrow-up"></span>
+            </div>
+            <div *ngIf="client.data.changeBehaviour === -1">
+              <span class="arrow-down"></span>
+            </div>
+          </td>
+          <td>{{client.data.dateUpdated | date: "M/d/yyyy"}}</td>
+          <td>{{client.data.program}}</td>
+          <td>{{client.data.fees}}</td>
+          <td>{{client.data.auditorSince | date: "M/d/yyyy"}}</td>
+          <td>{{client.data.filesSEC}}</td>
+          <td>{{client.data.companyType}}</td>
+          <td>{{client.data.fiscalYearEnd}}</td>
+          <td>{{client.data.region}}</td>
+          <td>{{client.data.office}}</td>
+          <td>{{client.data.industrySector}}</td>
+          <td>{{client.data.lcsp}}</td>
+          <td>{{client.data.lcspYearsInRole}}</td>
+          <td>{{client.data.ap}}</td>
+          <td>{{client.data.apYearsInRole}}</td>
+        </tr>
+      </tbody>
+    </dx-data-grid>
+  </div>
+</div>

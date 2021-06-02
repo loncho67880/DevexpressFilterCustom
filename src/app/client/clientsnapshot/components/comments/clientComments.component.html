@@ -1,0 +1,67 @@
+<button class="btn btn-link" (click)="openModal(template)" [disabled]="loading$ | async">
+  <i class="icon-plus"></i>
+  {{ "client.addComment" | translate }}
+  <app-loading *ngIf="loading$ | async"></app-loading>
+</button>
+
+<div *ngIf="clientComments$ | async as clientComments">
+  <p *ngIf="clientComments.length == 0" class="client-comment__paragraph">{{ "client.noComments" | translate }}</p>
+</div>
+
+<div class="results">
+  <div *ngFor="let comment of clientComments$ | async" class="client-comment">
+    <div class="client-comment__details">
+      <p class="client-comment__paragraph">{{ comment.value }}</p>
+    </div>
+    <div class="client-comment__actions">
+      <div class="client-comment__author-date">
+        <div class="form-group">
+          <label>{{ "client.createdby" | translate }}:</label>
+          <p>{{ comment.modifyBy }}</p>
+        </div>
+        <div class="form-group">
+          <label>{{ "client.dateUpdated" | translate }}:</label>
+          <p>{{ comment.modifyDate }}</p>
+        </div>
+      </div>
+
+      <i class="icon-edit-circle-w" title="{{ 'common.edit' | translate }}" (click)="update(comment, template)" [disabled]="loading$ | async" ></i>
+      <i class="icon-delete-circle-w" title="{{ 'common.delete' | translate }}"(click)="openConfirm(comment, modalconfirm)" [disabled]="loading$ | async"></i>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ "client.addComment" | translate }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="content-modal">
+      <p>{{ "client.comment" | translate }}: </p>
+      <textarea id="comment" name="comment" class="form-control" rows="5" [(ngModel)]="comment"></textarea>
+    </div>
+    <div class="client-comment__actions whitebuttons">
+      <button type="button" class="btn btn-secundary" (click)="closeModal()">{{ "common.close" | translate }}</button>
+      <button type="button" class="btn btn-primary" (click)="save()">{{ "common.save" | translate }}</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalconfirm>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{ "client.confirmCommentDeleteTitle" | translate }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p>{{ "client.confirmCommentDelete" | translate }}</p>
+    <div class="client-comment__actions">
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">{{ "common.cancel" | translate }}</button>
+      <button type="button" class="btn btn-primary" (click)="delete()">{{ "client.deleteComment" | translate }}</button>
+    </div>
+  </div>
+</ng-template>
